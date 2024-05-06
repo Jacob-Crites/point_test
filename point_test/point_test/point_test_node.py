@@ -2,8 +2,12 @@
 import rclpy
 from rclpy.node import Node
 
+from time import sleep
 import numpy as np
 from geometry_msgs.msg import Point
+
+#Constant publishing
+"""
 
 class Point_Test_Node(Node): #Node Class (just for program)
 
@@ -24,7 +28,6 @@ class Point_Test_Node(Node): #Node Class (just for program)
         self.my_point.publish(fake_data)
             
 
-
 def main(args = None):
     rclpy.init(args=args)
     node = Point_Test_Node()
@@ -32,5 +35,36 @@ def main(args = None):
     rclpy.spin(node)
 
     rclpy.shutdown()
+if __name__ == '__main__':
+    main()
+
+"""
+
+#One time publish
+def main(args = None):
+    rclpy.init(args=args)
+
+    node = rclpy.create_node('Point_Test_Node')
+
+    publisher = node.create_publisher(Point, "point", 10)
+
+    msg = Point()
+    send = True
+    i = 1
+
+    while rclpy.ok():
+        msg.x = float(5)
+        msg.z = float(3)
+        i += 1
+        node.get_logger().info('Publishing: "%s"' % msg)
+
+        if send:
+            publisher.publish(msg)
+            Send = False
+        sleep(10)
+
+    node.destroy_node()
+    rclpy.shutdown()
+
 if __name__ == '__main__':
     main()
